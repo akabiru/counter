@@ -13,9 +13,10 @@ function reducer(state, action) {
 }
 
 /* Store
-* Maintains the state
+* Maintains the state - stores application data
 * Accepts actions from the view
 ** only store has access to reducer
+** state is never mutated directly outside the store
 */
 function createStore(reducer) {
   let state = 0
@@ -42,7 +43,8 @@ const incrementAction = {
 }
 
 console.log(`Before dispatch: ${store.getState()}`)
-// dispatch increment action
+// dispatch increment action - view should emit action
+// dispatch sends actions to the store
 store.dispatch(incrementAction)
 // get Updated state
 console.log('Updated State: ', store.getState())
