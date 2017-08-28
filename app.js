@@ -1,18 +1,63 @@
+/* Reducer
+* Receives action and currentState
+* Returns new state
+*/
 function reducer(state, action) {
   if (action.type === 'INCREMENT') {
-    return state + 1
-  } else {
+    return state + action.amount
+  } else if (action.type === 'DECREMENT') {
+    return state - action.amount
+  }else {
     return state
   }
 }
 
-const incrementAction = { type: 'INCREMENT' };
+/* Store
+* Maintains the state
+* Accepts actions from the view
+** only store has access to reducer
+*/
+function createStore(reducer) {
+  let state = 0
 
-console.log(reducer(0, incrementAction));
-console.log(reducer(1, incrementAction));
-console.log(reducer(5, incrementAction));
+  const getState = () => (state)
 
-const unknownAction = { type: 'UNKNOWN' };
+  const dispatch = action => {
+    // fire-and-forget
+    state = reducer(state, action)
+  }
 
-console.log(reducer(0, unknownAction));
-console.log(reducer(1, unknownAction));
+  return {
+    getState,
+    dispatch,
+  }
+}
+
+
+const store = createStore(reducer)
+
+const incrementAction = {
+  type: 'INCREMENT',
+  amount: 3,
+}
+
+console.log(`Before dispatch: ${store.getState()}`)
+// dispatch increment action
+store.dispatch(incrementAction)
+// get Updated state
+console.log('Updated State: ', store.getState())
+
+store.dispatch(incrementAction)
+console.log(`Updated State: ${store.getState()}`)
+
+const decrementAction = {
+  type: 'DECREMENT',
+  amount: 4
+}
+
+console.log(`Before dispatch: ${store.getState()}`)
+// dispatch decrement action
+store.dispatch(decrementAction)
+
+// log updated state
+console.log(`Updated State: ${store.getState()}`)
